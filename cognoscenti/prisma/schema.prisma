@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Donation {
+  id              String   @id @default(cuid())
+  amount          Int      // in cents
+  displayName     String?
+  email           String?
+  benefactorIQ    Int
+  revealTier      String   // APEX | GOLD | SILVER | STANDARD | PENDING
+  revealMessage   String   @default("")
+  stripePaymentId String   @unique
+  isAnonymous     Boolean  @default(false)
+  paid            Boolean  @default(false)
+  createdAt       DateTime @default(now())
+}
+
+model LeaderboardEntry {
+  id            String   @id @default(cuid())
+  displayName   String
+  totalDonated  Int      // in cents
+  donationCount Int      @default(1)
+  benefactorIQ  Int
+  email         String?  @unique
+  updatedAt     DateTime @updatedAt
+}
+
+model Challenge {
+  id              String   @id @default(cuid())
+  challengerName  String
+  challengerScore Int
+  challengeeEmail String
+  message         String
+  createdAt       DateTime @default(now())
+}
